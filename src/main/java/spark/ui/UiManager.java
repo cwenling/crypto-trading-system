@@ -2,7 +2,8 @@ package spark.ui;
 
 
 import com.binance.api.client.exception.BinanceApiException;
-import spark.pub.MarketDataManager;
+import spark.logic.source.BinanceConnector;
+import spark.logic.source.MarketDataManager;
 
 public class UiManager {
 
@@ -17,9 +18,12 @@ public class UiManager {
 
         try {
             String symbol = ui.readInput();
-            MarketDataManager mdm = new MarketDataManager(symbol);
+            MarketDataManager mdm = new MarketDataManager();
+            mdm.subscribeTrades(symbol);
+            //mdm.printOrderBook(symbol);
         } catch (BinanceApiException e) {
             ui.print(e.getMessage());
+            ui.close();
         }
     }
 

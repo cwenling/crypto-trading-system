@@ -14,6 +14,10 @@ public class UiUtil {
         return this.sc.nextLine();
     }
 
+    public void close() {
+        this.sc.close();
+    }
+
     public void print(String output) {
         System.out.println(output);
     }

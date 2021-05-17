@@ -19,7 +19,7 @@ import java.util.TreeMap;
  */
 public class MarketDataManager {
 
-    private static final String BIDS  = "BIDS";
+    /*private static final String BIDS  = "BIDS";
     private static final String ASKS  = "ASKS";
 
     private long lastUpdateId;
@@ -31,9 +31,9 @@ public class MarketDataManager {
         startDepthEventStreaming(symbol);
     }
 
-    /**
+    *//**
      * Initializes the depth cache by using the REST API.
-     */
+     *//*
     private void initializeDepthCache(String symbol) {
         BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance();
         BinanceApiRestClient client = factory.newRestClient();
@@ -55,9 +55,9 @@ public class MarketDataManager {
         depthCache.put(BIDS, bids);
     }
 
-    /**
+    *//**
      * Begins streaming of depth events.
-     */
+     *//*
     private void startDepthEventStreaming(String symbol) {
         BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance();
         BinanceApiWebSocketClient client = factory.newWebSocketClient();
@@ -73,11 +73,11 @@ public class MarketDataManager {
         });
     }
 
-    /**
+    *//**
      * Updates an order book (bids or asks) with a delta received from the server.
      *
      * Whenever the qty specified is ZERO, it means the price should was removed from the order book.
-     */
+     *//*
     private void updateOrderBook(NavigableMap<BigDecimal, BigDecimal> lastOrderBookEntries, List<OrderBookEntry> orderBookDeltas) {
         for (OrderBookEntry orderBookDelta : orderBookDeltas) {
             BigDecimal price = new BigDecimal(orderBookDelta.getPrice());
@@ -99,30 +99,30 @@ public class MarketDataManager {
         return depthCache.get(BIDS);
     }
 
-    /**
+    *//**
      * @return the best ask in the order book
-     */
+     *//*
     private Map.Entry<BigDecimal, BigDecimal> getBestAsk() {
         return getAsks().lastEntry();
     }
 
-    /**
+    *//**
      * @return the best bid in the order book
-     */
+     *//*
     private Map.Entry<BigDecimal, BigDecimal> getBestBid() {
         return getBids().firstEntry();
     }
 
-    /**
+    *//**
      * @return a depth cache, containing two keys (ASKs and BIDs), and for each, an ordered list of book entries.
-     */
+     *//*
     public Map<String, NavigableMap<BigDecimal, BigDecimal>> getDepthCache() {
         return depthCache;
     }
 
-    /**
+    *//**
      * Prints the cached order book / depth of a symbol as well as the best ask and bid price in the book.
-     */
+     *//*
     private void printDepthCache() {
         System.out.println(depthCache);
         System.out.println("ASKS:");
@@ -133,14 +133,14 @@ public class MarketDataManager {
         System.out.println("BEST BID: " + toDepthCacheEntryString(getBestBid()));
     }
 
-    /**
+    *//**
      * Pretty prints an order book entry in the format "price / quantity".
-     */
+     *//*
     private static String toDepthCacheEntryString(Map.Entry<BigDecimal, BigDecimal> depthCacheEntry) {
         return depthCacheEntry.getKey().toPlainString() + " / " + depthCacheEntry.getValue();
     }
 
     public static void main(String[] args) {
         new MarketDataManager("ETHBTC");
-    }
+    }*/
 }

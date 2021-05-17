@@ -1,4 +1,11 @@
 package spark.logic.message;
 
-public interface EventListener {
+import com.binance.api.client.domain.market.OrderBook;
+
+public interface EventListener extends Runnable {
+
+    void handleEvent(OrderBook orderBook);
+
+    // void handleEvent(ScheduleEvent timer);
+
 }
