@@ -19,7 +19,7 @@ public class UiManager {
         try {
             String symbol = ui.readInput();
             MarketDataManager mdm = new MarketDataManager();
-            mdm.subscribeTrades(symbol);
+            mdm.subscribeOrderBook(symbol);
             //mdm.printOrderBook(symbol);
         } catch (BinanceApiException e) {
             ui.print(e.getMessage());
