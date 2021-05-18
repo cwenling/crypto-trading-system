@@ -7,6 +7,9 @@ import com.binance.api.client.BinanceApiWebSocketClient;
 import com.binance.api.client.domain.market.AggTrade;
 import com.binance.api.client.domain.market.OrderBook;
 import com.binance.api.client.domain.market.OrderBookEntry;
+import com.binance.api.client.impl.BinanceApiServiceGenerator;
+import spark.impl.BinanceApiFastWebSocketImpl;
+import spark.logic.message.EventManager;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -69,16 +72,18 @@ public class BinanceConnector {
      * Begins streaming of depth events.
      */
     public void startDepthEventStreaming(String symbol) {
-        BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance();
-        BinanceApiWebSocketClient client = factory.newWebSocketClient();
+        //BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance();
+        //BinanceApiWebSocketClient client = factory.newWebSocketClient();
+        BinanceApiWebSocketClient client = new BinanceApiFastWebSocketImpl(BinanceApiServiceGenerator.getSharedClient());
 
         client.onDepthEvent(symbol.toLowerCase(), response -> {
             if (response.getFinalUpdateId() > lastUpdateId) {
-                System.out.println(response);
+                //System.out.println(response);
                 lastUpdateId = response.getFinalUpdateId();
                 updateOrderBook(getAsks(), response.getAsks());
                 updateOrderBook(getBids(), response.getBids());
-                printDepthCache();
+                //printDepthCache();
+
             }
         });
     }

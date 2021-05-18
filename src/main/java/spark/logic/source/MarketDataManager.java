@@ -1,5 +1,7 @@
 package spark.logic.source;
 
+import spark.logic.message.EventManager;
+
 import java.util.HashMap;
 import java.util.Map;
 
