@@ -8,6 +8,7 @@ import com.binance.api.client.domain.market.AggTrade;
 import com.binance.api.client.domain.market.OrderBook;
 import com.binance.api.client.domain.market.OrderBookEntry;
 import com.binance.api.client.impl.BinanceApiServiceGenerator;
+import spark.data.CachedOrderBook;
 import spark.impl.BinanceApiFastWebSocketImpl;
 import spark.logic.message.EventManager;
 
@@ -28,9 +29,10 @@ public class BinanceConnector {
     private static final String ASKS  = "ASKS";
 
     private long lastUpdateId;
-    private String symbol;
+    private final String symbol;
 
-    private Map<String, NavigableMap<BigDecimal, BigDecimal>> depthCache;
+    //private Map<String, NavigableMap<BigDecimal, BigDecimal>> depthCache;
+    private CachedOrderBook depthCache;
 
     /**
      * Key is the aggregate trade id, and the value contains the aggregated trade data, which is
@@ -52,7 +54,7 @@ public class BinanceConnector {
         BinanceApiRestClient client = factory.newRestClient();
         OrderBook orderBook = client.getOrderBook(symbol.toUpperCase(), 10);
 
-        this.depthCache = new HashMap<>();
+        this.depthCache = new CachedOrderBook();
         this.lastUpdateId = orderBook.getLastUpdateId();
 
         NavigableMap<BigDecimal, BigDecimal> asks = new TreeMap<>(Comparator.reverseOrder());
@@ -80,8 +82,8 @@ public class BinanceConnector {
             if (response.getFinalUpdateId() > lastUpdateId) {
                 //System.out.println(response);
                 lastUpdateId = response.getFinalUpdateId();
-                updateOrderBook(getAsks(), response.getAsks());
-                updateOrderBook(getBids(), response.getBids());
+                updateOrderBook(depthCache.getAsks(), response.getAsks());
+                updateOrderBook(depthCache.getBids(), response.getBids());
                 //printDepthCache();
 
             }
@@ -147,7 +149,7 @@ public class BinanceConnector {
         }
     }
 
-    public NavigableMap<BigDecimal, BigDecimal> getAsks() {
+    /*public NavigableMap<BigDecimal, BigDecimal> getAsks() {
         return depthCache.get(ASKS);
     }
 
@@ -155,24 +157,24 @@ public class BinanceConnector {
         return depthCache.get(BIDS);
     }
 
-    /**
+    *//**
      * @return the best ask in the order book
-     */
+     *//*
     private Map.Entry<BigDecimal, BigDecimal> getBestAsk() {
         return getAsks().lastEntry();
     }
 
-    /**
+    *//**
      * @return the best bid in the order book
-     */
+     *//*
     private Map.Entry<BigDecimal, BigDecimal> getBestBid() {
         return getBids().firstEntry();
-    }
+    }*/
 
     /**
      * @return a depth cache, containing two keys (ASKs and BIDs), and for each, an ordered list of book entries.
      */
-    public Map<String, NavigableMap<BigDecimal, BigDecimal>> getDepthCache() {
+    public CachedOrderBook getDepthCache() {
         return depthCache;
     }
 
@@ -197,11 +199,11 @@ public class BinanceConnector {
     public void printDepthCache() {
         System.out.println(depthCache);
         System.out.println("ASKS:");
-        getAsks().entrySet().forEach(entry -> System.out.println(toDepthCacheEntryString(entry)));
+        depthCache.getAsks().entrySet().forEach(entry -> System.out.println(toDepthCacheEntryString(entry)));
         System.out.println("BIDS:");
-        getBids().entrySet().forEach(entry -> System.out.println(toDepthCacheEntryString(entry)));
-        System.out.println("BEST ASK: " + toDepthCacheEntryString(getBestAsk()));
-        System.out.println("BEST BID: " + toDepthCacheEntryString(getBestBid()));
+        depthCache.getBids().entrySet().forEach(entry -> System.out.println(toDepthCacheEntryString(entry)));
+        System.out.println("BEST ASK: " + toDepthCacheEntryString(depthCache.getBestAsk()));
+        System.out.println("BEST BID: " + toDepthCacheEntryString(depthCache.getBestBid()));
     }
 
     /**
