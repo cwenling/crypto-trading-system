@@ -12,15 +12,16 @@ public class EventBroker<T> {
         this.bQueue = new ArrayBlockingQueue<T>(1000);
     }
 
-    public void enqueue(T oBook) throws InterruptedException {
-        this.bQueue.put(oBook);
-        //System.out.println(result);
-        //System.out.println(bQueue);
-
+    public void enqueue(T event) throws InterruptedException {
+        this.bQueue.put(event);
     }
 
     public T dequeue() throws InterruptedException {
         return this.bQueue.take();
+    }
+
+    public ArrayBlockingQueue getQueue() {
+        return bQueue;
     }
 
 }
