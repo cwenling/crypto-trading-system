@@ -26,7 +26,7 @@ public class EventManager {
         this.orderBookEventBroker.enqueue(orderBook);
     }
 
-    public void publish(ScheduledEvent scheduledEvent) {
+    public void publish(ScheduledEvent scheduledEvent) throws InterruptedException {
         this.scheduledEventEventBroker.enqueue(scheduledEvent);
     }
 
@@ -34,11 +34,11 @@ public class EventManager {
         this.subscribers.add(listener);
     }
 
-    public EventBroker<CachedOrderBook> getOrderBookEventBroker() {
+    public EventBroker getOrderBookEventBroker() {
         return this.orderBookEventBroker;
     }
 
-    public EventBroker<ScheduledEvent> getScheduledEventEventBroker() {
+    public EventBroker getScheduledEventEventBroker() {
         return this.scheduledEventEventBroker;
     }
 

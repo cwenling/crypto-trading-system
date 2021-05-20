@@ -13,8 +13,13 @@ public class ScheduledJob implements Job {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         JobDataMap dataMap = jobExecutionContext.getJobDetail().getJobDataMap();
         String tag = dataMap.getString("tag");
-        String eventManagerString = dataMap.getString("eventManager");
-        EventManager eM = new Gson().fromJson(eventManagerString, EventManager.class);
-        eM.publish(new ScheduledEvent(tag));
+        //String eventManagerString = dataMap.getString("eventManager");
+        //EventManager eM = new Gson().fromJson(eventManagerString, EventManager.class);
+        EventManager eM = (EventManager) dataMap.get("eventManager");
+        try {
+            eM.publish(new ScheduledEvent(tag));
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

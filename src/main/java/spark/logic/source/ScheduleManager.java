@@ -30,7 +30,8 @@ public class ScheduleManager {
     private JobDetail buildJob(String tag) {
         JobDetail job = JobBuilder.newJob(ScheduledJob.class).build();
         job.getJobDataMap().put("tag", tag);
-        job.getJobDataMap().put("eventManager", new Gson().toJson(eventManager));
+        //job.getJobDataMap().put("eventManager", new Gson().toJson(eventManager));
+        job.getJobDataMap().put("eventManager", eventManager);
         return job;
     }
 

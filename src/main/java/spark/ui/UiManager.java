@@ -2,10 +2,13 @@ package spark.ui;
 
 
 import com.binance.api.client.exception.BinanceApiException;
+import org.quartz.SchedulerException;
 import spark.logic.algo.AnalyticsManager;
+import spark.logic.algo.CrossoverManager;
 import spark.logic.message.EventManager;
 import spark.logic.source.BinanceConnector;
 import spark.logic.source.MarketDataManager;
+import spark.logic.source.ScheduleManager;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -25,15 +28,17 @@ public class UiManager {
             String symbol = ui.readInput();
             EventManager eM = new EventManager();
             MarketDataManager mdm = new MarketDataManager(eM, symbol);
-            AnalyticsManager aM = new AnalyticsManager(eM);
+            ScheduleManager sM = new ScheduleManager(eM);
+            //AnalyticsManager aM = new AnalyticsManager(eM);
             //mdm.subscribeOrderBook(symbol, eM);
             //mdm.printOrderBook(symbol);
+            CrossoverManager cM = new CrossoverManager(eM, sM, 1000, 3000);
 
             ScheduledExecutorService eS = Executors.newScheduledThreadPool(2);
             eS.execute(mdm);
-            eS.execute(aM);
+            eS.execute(cM);
 
-        } catch (BinanceApiException e) {
+        } catch (BinanceApiException | SchedulerException e) {
             ui.print(e.getMessage());
             ui.close();
         }

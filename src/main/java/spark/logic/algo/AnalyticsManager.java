@@ -4,6 +4,7 @@ import spark.data.CachedOrderBook;
 import spark.logic.message.EventBroker;
 import spark.logic.message.EventListener;
 import spark.logic.message.EventManager;
+import spark.logic.schedule.ScheduledEvent;
 
 public class AnalyticsManager implements EventListener, Runnable {
 
@@ -19,8 +20,13 @@ public class AnalyticsManager implements EventListener, Runnable {
     }
 
     @Override
+    public void handleEvent(ScheduledEvent scheduledEvent) {
+
+    }
+
+    @Override
     public void run() {
-        EventBroker eB = this.eM.getEventBroker();
+        EventBroker eB = this.eM.getOrderBookEventBroker();
         while (true) {
             try {
                 //System.out.println("printing cached orderbook");
