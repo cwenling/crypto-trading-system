@@ -19,13 +19,13 @@ public class CrossoverManager implements EventListener, Runnable {
     private final DescriptiveStatistics sma2;
     private CachedOrderBook lastOrderBook = null;
 
-    public CrossoverManager(EventManager eM, ScheduleManager sM, int period1, int period2) {
+    public CrossoverManager(EventManager eM, ScheduleManager sM, int period1, int period2, int windowSize1, int windowSize2) {
         this.eventManager = eM;
         this.scheduleManager = sM;
         this.period1 = period1;
         this.period2 = period2;
-        this.sma1 = new DescriptiveStatistics(period1);
-        this.sma2 = new DescriptiveStatistics(period2);
+        this.sma1 = new DescriptiveStatistics(windowSize1);
+        this.sma2 = new DescriptiveStatistics(windowSize2);
     }
 
     public void initialize() {

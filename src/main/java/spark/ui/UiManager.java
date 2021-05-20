@@ -32,7 +32,7 @@ public class UiManager {
             //AnalyticsManager aM = new AnalyticsManager(eM);
             //mdm.subscribeOrderBook(symbol, eM);
             //mdm.printOrderBook(symbol);
-            CrossoverManager cM = new CrossoverManager(eM, sM, 1000, 3000);
+            CrossoverManager cM = new CrossoverManager(eM, sM, 1000, 3000, 10, 20);
 
             ScheduledExecutorService eS = Executors.newScheduledThreadPool(2);
             eS.execute(mdm);
