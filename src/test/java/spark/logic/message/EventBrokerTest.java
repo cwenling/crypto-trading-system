@@ -12,9 +12,13 @@ public class EventBrokerTest {
     public void enqueueEvent_validEvent_success() throws InterruptedException {
         EventBroker<Integer> broker = new EventBroker<>();
         broker.enqueue(4);
+        broker.enqueue(99);
         ArrayBlockingQueue<Integer> queue = new ArrayBlockingQueue<>(5);
         queue.put(4);
+        queue.put(99);
         Assertions.assertEquals(broker.getQueue().toArray()[0], queue.toArray()[0]);
+        Assertions.assertEquals(broker.getQueue().toArray()[1], queue.toArray()[1]);
+        Assertions.assertEquals(broker.getQueue().toArray()[1], 99);
     }
 
     @Test
