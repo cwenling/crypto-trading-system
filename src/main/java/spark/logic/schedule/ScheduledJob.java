@@ -1,5 +1,6 @@
 package spark.logic.schedule;
 
+import com.google.gson.Gson;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -11,7 +12,9 @@ public class ScheduledJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         JobDataMap dataMap = jobExecutionContext.getJobDetail().getJobDataMap();
-        EventManager eM = (EventManager) dataMap.get("eventManager");
         String tag = dataMap.getString("tag");
+        String eventManagerString = dataMap.getString("eventManager");
+        EventManager eM = new Gson().fromJson(eventManagerString, EventManager.class);
+        eM.publish(new ScheduledEvent(tag));
     }
 }

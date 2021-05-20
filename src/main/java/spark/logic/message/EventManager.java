@@ -2,6 +2,7 @@ package spark.logic.message;
 
 import com.binance.api.client.domain.market.OrderBook;
 import spark.data.CachedOrderBook;
+import spark.logic.schedule.ScheduledEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,24 +12,34 @@ import java.util.TreeSet;
 public class EventManager {
 
     private Set<EventListener> subscribers;
-    private EventBroker<CachedOrderBook> broker;
+    private EventBroker<CachedOrderBook> orderBookEventBroker;
+    private EventBroker<ScheduledEvent> scheduledEventEventBroker;
 
     public EventManager() {
         this.subscribers = new TreeSet<>();
-        this.broker = new EventBroker();
+        this.orderBookEventBroker = new EventBroker<CachedOrderBook>();
+        this.scheduledEventEventBroker = new EventBroker<ScheduledEvent>();
     }
 
     public void publish(CachedOrderBook orderBook) throws InterruptedException {
         //this.subscribers.forEach(s -> s.handleEvent(orderbook));
-        this.broker.enqueue(orderBook);
+        this.orderBookEventBroker.enqueue(orderBook);
+    }
+
+    public void publish(ScheduledEvent scheduledEvent) {
+        this.scheduledEventEventBroker.enqueue(scheduledEvent);
     }
 
     public void addListener(EventListener listener) {
         this.subscribers.add(listener);
     }
 
-    public EventBroker getEventBroker() {
-        return this.broker;
+    public EventBroker<CachedOrderBook> getOrderBookEventBroker() {
+        return this.orderBookEventBroker;
+    }
+
+    public EventBroker<ScheduledEvent> getScheduledEventEventBroker() {
+        return this.scheduledEventEventBroker;
     }
 
 }
