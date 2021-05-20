@@ -8,9 +8,13 @@ import java.util.Map;
 public class MarketDataManager implements Runnable {
 
     private Map<String, BinanceConnector> connections;
+    EventManager eM;
+    String sym;
 
-    public MarketDataManager () {
+    public MarketDataManager (EventManager eM, String s) {
         this.connections = new HashMap<>();
+        this.eM = eM;
+        this.sym = s;
     }
 
     private boolean isSubscribed(String symbol) {
@@ -33,11 +37,11 @@ public class MarketDataManager implements Runnable {
         this.addConnectionGateway(connection);
     }
 
-    public void subscribeOrderBook(String symbol) {
+    public void subscribeOrderBook(String symbol, EventManager eM) throws InterruptedException {
         if (!this.isSubscribed(symbol)) {
             this.subscribeGateway(symbol);
         }
-        this.getConnection(symbol).startDepthEventStreaming(symbol);
+        this.getConnection(symbol).startDepthEventStreaming(symbol, eM);
     }
 
     public void subscribeTrades(String symbol) {
@@ -47,13 +51,12 @@ public class MarketDataManager implements Runnable {
         this.getConnection(symbol).startAggTradesEventStreaming(symbol);
     }
 
-    public void printOrderBook(String symbol) {
-        BinanceConnector connection = this.getConnection(symbol);
-        connection.printDepthCache();
-    }
-
     @Override
     public void run() {
-
+        try {
+            subscribeOrderBook(sym, eM);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

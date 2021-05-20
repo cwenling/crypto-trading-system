@@ -49,4 +49,24 @@ public class CachedOrderBook {
         oBook.put(string, map);
     }
 
+    /**
+     * Prints the cached order book / depth of a symbol as well as the best ask and bid price in the book.
+     */
+    public void printDepthCache() {
+        System.out.println(oBook);
+        System.out.println("ASKS:");
+        getAsks().entrySet().forEach(entry -> System.out.println(toDepthCacheEntryString(entry)));
+        System.out.println("BIDS:");
+        getBids().entrySet().forEach(entry -> System.out.println(toDepthCacheEntryString(entry)));
+        System.out.println("BEST ASK: " + toDepthCacheEntryString(getBestAsk()));
+        System.out.println("BEST BID: " + toDepthCacheEntryString(getBestBid()));
+    }
+
+    /**
+     * Pretty prints an order book entry in the format "price / quantity".
+     */
+    private static String toDepthCacheEntryString(Map.Entry<BigDecimal, BigDecimal> depthCacheEntry) {
+        return depthCacheEntry.getKey().toPlainString() + " / " + depthCacheEntry.getValue();
+    }
+
 }

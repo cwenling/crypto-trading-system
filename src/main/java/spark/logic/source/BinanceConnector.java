@@ -10,6 +10,7 @@ import com.binance.api.client.domain.market.OrderBookEntry;
 import com.binance.api.client.impl.BinanceApiServiceGenerator;
 import spark.data.CachedOrderBook;
 import spark.impl.BinanceApiFastWebSocketImpl;
+import spark.logic.message.EventListener;
 import spark.logic.message.EventManager;
 
 import java.math.BigDecimal;
@@ -73,10 +74,10 @@ public class BinanceConnector {
     /**
      * Begins streaming of depth events.
      */
-    public void startDepthEventStreaming(String symbol) {
-        //BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance();
-        //BinanceApiWebSocketClient client = factory.newWebSocketClient();
-        BinanceApiWebSocketClient client = new BinanceApiFastWebSocketImpl(BinanceApiServiceGenerator.getSharedClient());
+    public void startDepthEventStreaming(String symbol, EventManager eM) {
+        BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance();
+        BinanceApiWebSocketClient client = factory.newWebSocketClient();
+        //BinanceApiWebSocketClient client = new BinanceApiFastWebSocketImpl(BinanceApiServiceGenerator.getSharedClient());
 
         client.onDepthEvent(symbol.toLowerCase(), response -> {
             if (response.getFinalUpdateId() > lastUpdateId) {
@@ -85,7 +86,12 @@ public class BinanceConnector {
                 updateOrderBook(depthCache.getAsks(), response.getAsks());
                 updateOrderBook(depthCache.getBids(), response.getBids());
                 //printDepthCache();
-
+                try {
+                    eM.publish(depthCache);
+                    //System.out.println(response);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
