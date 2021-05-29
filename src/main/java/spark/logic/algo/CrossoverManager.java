@@ -1,5 +1,6 @@
 package spark.logic.algo;
 
+import com.binance.api.client.domain.market.AggTrade;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.quartz.SchedulerException;
 import spark.data.CachedOrderBook;
@@ -45,6 +46,10 @@ public class CrossoverManager implements EventListener, Runnable {
     @Override
     public void handleEvent(ScheduledEvent scheduledEvent) {
         computeSMA(scheduledEvent);
+    }
+
+    @Override
+    public void handleEvent(AggTrade aggTrade) {
     }
 
     private void computeSMA(ScheduledEvent scheduledEvent) {

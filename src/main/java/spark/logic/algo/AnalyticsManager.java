@@ -1,5 +1,6 @@
 package spark.logic.algo;
 
+import com.binance.api.client.domain.market.AggTrade;
 import spark.data.CachedOrderBook;
 import spark.logic.message.EventBroker;
 import spark.logic.message.EventListener;
@@ -22,6 +23,10 @@ public class AnalyticsManager implements EventListener, Runnable {
     @Override
     public void handleEvent(ScheduledEvent scheduledEvent) {
 
+    }
+
+    @Override
+    public void handleEvent(AggTrade aggTrade) {
     }
 
     @Override
