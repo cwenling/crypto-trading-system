@@ -38,7 +38,7 @@ public class UiManager {
 
             ScheduledExecutorService eS = Executors.newScheduledThreadPool(3);
             eS.execute(mdm);
-//            eS.execute(cM);
+            eS.execute(cM);
             eS.execute(riskWatcher);
 
         } catch (BinanceApiException | SchedulerException e) {
