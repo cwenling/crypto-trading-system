@@ -113,7 +113,7 @@ public class BinanceConnector {
     /**
      * Begins streaming of agg trades events.
      */
-    public void startAggTradesEventStreaming(String symbol) {
+    public void startAggTradesEventStreaming(String symbol, EventManager eM) {
         BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance();
         BinanceApiWebSocketClient client = factory.newWebSocketClient();
 
@@ -133,7 +133,13 @@ public class BinanceConnector {
 
             // Store the updated agg trade in the cache
             aggTradesCache.put(aggregatedTradeId, updateAggTrade);
-            System.out.println(updateAggTrade);
+//            System.out.println(updateAggTrade);
+            try {
+                eM.publish(updateAggTrade);
+                //System.out.println(response);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         });
     }
 

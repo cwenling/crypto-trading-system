@@ -44,17 +44,18 @@ public class MarketDataManager implements Runnable {
         this.getConnection(symbol).startDepthEventStreaming(symbol, eM);
     }
 
-    public void subscribeTrades(String symbol) {
+    public void subscribeTrades(String symbol, EventManager eM) throws InterruptedException {
         if (!this.isSubscribed(symbol)) {
             this.subscribeGateway(symbol);
         }
-        this.getConnection(symbol).startAggTradesEventStreaming(symbol);
+        this.getConnection(symbol).startAggTradesEventStreaming(symbol, eM);
     }
 
     @Override
     public void run() {
         try {
             subscribeOrderBook(sym, eM);
+            subscribeTrades(sym, eM);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

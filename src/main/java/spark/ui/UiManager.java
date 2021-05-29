@@ -5,6 +5,7 @@ import com.binance.api.client.exception.BinanceApiException;
 import org.quartz.SchedulerException;
 import spark.logic.algo.AnalyticsManager;
 import spark.logic.algo.CrossoverManager;
+import spark.logic.algo.RiskWatcher;
 import spark.logic.message.EventManager;
 import spark.logic.source.BinanceConnector;
 import spark.logic.source.MarketDataManager;
@@ -33,10 +34,12 @@ public class UiManager {
             //mdm.subscribeOrderBook(symbol, eM);
             //mdm.printOrderBook(symbol);
             CrossoverManager cM = new CrossoverManager(eM, sM, 1000, 3000, 10, 20);
+            RiskWatcher riskWatcher = new RiskWatcher(eM, sM, 1.5, 10);
 
-            ScheduledExecutorService eS = Executors.newScheduledThreadPool(2);
+            ScheduledExecutorService eS = Executors.newScheduledThreadPool(3);
             eS.execute(mdm);
-            eS.execute(cM);
+//            eS.execute(cM);
+            eS.execute(riskWatcher);
 
         } catch (BinanceApiException | SchedulerException e) {
             ui.print(e.getMessage());
